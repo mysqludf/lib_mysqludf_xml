@@ -1,0 +1,30 @@
+USE mysql;
+SELECT xql_concat();
+ERROR HY000: Can't initialize function 'xql_concat'; xql_concat() requires at least 1 argument
+SELECT xql_concat("<a/>");
+xql_concat("<a/>")
+<a/>
+SELECT xql_concat("<a/>", "<b/>");
+xql_concat("<a/>", "<b/>")
+<a/><b/>
+SELECT xql_concat("<a/>", "<b name =\"Arnold Daniëls\"/>");
+xql_concat("<a/>", "<b name =\"Arnold Daniëls\"/>")
+<a/><b name ="Arnold Daniëls"/>
+SELECT xql_concat("<a/>", "no > cdata here" AS `xql:cdata`, "<b/>");
+xql_concat("<a/>", "no > cdata here" AS `xql:cdata`, "<b/>")
+<a/>no > cdata here<b/>
+SELECT xql_concat(1, 2, 3, 4);
+xql_concat(1, 2, 3, 4)
+1234
+SELECT xql_concat("");
+xql_concat("")
+
+SELECT xql_concat(null);
+xql_concat(null)
+NULL
+SELECT xql_concat("", "<a/>", "<b/>");
+xql_concat("", "<a/>", "<b/>")
+<a/><b/>
+SELECT xql_concat(null, "<a/>", "<b/>");
+xql_concat(null, "<a/>", "<b/>")
+<a/><b/>

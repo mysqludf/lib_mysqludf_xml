@@ -1,0 +1,26 @@
+USE mysql;
+SELECT xql_encode();
+ERROR HY000: Can't initialize function 'xql_encode'; xql_encode() requires 1 argument
+SELECT xql_encode("ab");
+xql_encode("ab")
+ab
+SELECT xql_encode("Arnold Daniëls");
+xql_encode("Arnold Daniëls")
+Arnold Daniëls
+SELECT xql_encode("Remember two > one");
+xql_encode("Remember two > one")
+Remember two &gt; one
+SELECT xql_encode(10);
+xql_encode(10)
+10
+SELECT xql_encode(MAKEDATE(2001,32));
+xql_encode(MAKEDATE(2001,32))
+2001-02-01
+SELECT xql_encode("ab", "de");
+ERROR HY000: Can't initialize function 'xql_encode'; xql_encode() requires 1 argument
+SELECT xql_encode("");
+xql_encode("")
+
+SELECT xql_encode(null);
+xql_encode(null)
+NULL

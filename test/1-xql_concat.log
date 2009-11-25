@@ -1,0 +1,34 @@
+USE mysql;
+SELECT xql_concat(xql_element("album"));
+xql_concat(xql_element("album"))
+<album/>
+SELECT xql_concat(xql_element("album"), "<book/>");
+xql_concat(xql_element("album"), "<book/>")
+<album/><book/>
+SELECT xql_concat(xql_element("album"), xql_element("book"));
+xql_concat(xql_element("album"), xql_element("book"))
+<album/><book/>
+SELECT xql_concat(xql_element("album"), xql_element("book", "text"));
+xql_concat(xql_element("album"), xql_element("book", "text"))
+<album/><book>text</book>
+SELECT xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_element("b", "text"));
+xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_element("b", "text"))
+<album artist="rolling stones"><![CDATA[A > bang]]></album><b>text</b>
+SELECT xql_concat(xql_element(NULL), xql_element("b", "text"));
+xql_concat(xql_element(NULL), xql_element("b", "text"))
+<b>text</b>
+SELECT xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`));
+xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`))
+<album artist="rolling stones"><![CDATA[A > bang]]></album><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release>
+SELECT xql_concat(
+xql_textdecl("1.0", "ISO-8859-1", "yes"),
+xql_pi("type=\"text/xml\" href=\"yourstyle.xsl\"" as `xsl-stylesheet`),
+xql_dtd("persons", "//CRM/PERSONS/DTD/1.0", "http://www.test.com/crm/persons.dtd"),
+xql_concat("persons" AS `xql:root`,
+xql_element("person", xql_forest("possessions" AS `xql:root`, "laptop" AS `possession`, "book" AS `possession`, "illusion of free will" AS `possession`), "Arnold Daniëls" as name, 25 as age),
+xql_element("person", xql_forest("possessions" AS `xql:root`, "laptop" AS `possession`, "power of the 16 beasts" AS `possession`), "Roland Bouman" as name, null as age)
+)
+) AS `xml doc`;
+xml doc
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+<?xsl-stylesheet type="text/xml" href="yourstyle.xsl"?><!DOCTYPE persons PUBLIC "//CRM/PERSONS/DTD/1.0" "http://www.test.com/crm/persons.dtd"><persons><person name="Arnold Dani&#xEB;ls" age="25"><possessions><possession>laptop</possession><possession>book</possession><possession>illusion of free will</possession></possessions></person><person name="Roland Bouman"><possessions><possession>laptop</possession><possession>power of the 16 beasts</possession></possessions></person></persons>

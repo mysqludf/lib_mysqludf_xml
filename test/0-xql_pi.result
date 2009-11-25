@@ -1,0 +1,17 @@
+USE mysql;
+SELECT xql_pi();
+ERROR HY000: Can't initialize function 'xql_pi'; xql_pi() requires 1 argument (content AS target)
+SELECT xql_pi("type=\"text/xml\" href=\"yourstyle.xsl\"" as `xsl-stylesheet`);
+xql_pi("type=\"text/xml\" href=\"yourstyle.xsl\"" as `xsl-stylesheet`)
+<?xsl-stylesheet type="text/xml" href="yourstyle.xsl"?>
+SELECT xql_pi(10);
+xql_pi(10)
+<?10 10?>
+SELECT xql_pi("" as `xsl-stylesheet`);
+xql_pi("" as `xsl-stylesheet`)
+<?xsl-stylesheet ?>
+SELECT xql_pi(null);
+xql_pi(null)
+NULL
+SELECT xql_pi(10, 4);
+ERROR HY000: Can't initialize function 'xql_pi'; xql_pi() requires 1 argument (content AS target)

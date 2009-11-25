@@ -1,0 +1,26 @@
+USE mysql;
+SELECT xql_comment();
+ERROR HY000: Can't initialize function 'xql_comment'; xql_comment() requires 1 argument
+SELECT xql_comment("ab");
+xql_comment("ab")
+<!--ab-->
+SELECT xql_comment("Arnold Daniëls");
+xql_comment("Arnold Daniëls")
+<!--Arnold Daniëls-->
+SELECT xql_comment("Remember two > one");
+xql_comment("Remember two > one")
+<!--Remember two > one-->
+SELECT xql_comment(10);
+xql_comment(10)
+<!--10-->
+SELECT xql_comment(MAKEDATE(2001,32));
+xql_comment(MAKEDATE(2001,32))
+<!--2001-02-01-->
+SELECT xql_comment("ab", "de");
+ERROR HY000: Can't initialize function 'xql_comment'; xql_comment() requires 1 argument
+SELECT xql_comment("");
+xql_comment("")
+<!---->
+SELECT xql_comment(null);
+xql_comment(null)
+NULL

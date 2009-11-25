@@ -1,0 +1,34 @@
+USE mysql;
+SELECT xql_dtd();
+ERROR HY000: Can't initialize function 'xql_dtd'; xql_dtd() requires at least 1 argument (name)
+SELECT xql_dtd("html5");
+xql_dtd("html5")
+<!DOCTYPE html5>
+SELECT xql_dtd("html", "-//W3C//DTD XHTML 1.0 Transitional//EN");
+ERROR HY000: Can't initialize function 'xql_dtd'; xql_dtd() argument pubid given without argument sysid
+SELECT xql_dtd("html", "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd");
+xql_dtd("html", "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd")
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+SELECT xql_dtd("html", "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "subset");
+xql_dtd("html", "-//W3C//DTD XHTML 1.0 Transitional//EN", "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd", "subset")
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" [subset]>
+SELECT xql_dtd(1, 2, 3, 4);
+xql_dtd(1, 2, 3, 4)
+<!DOCTYPE 1 PUBLIC "2" "3" [4]>
+SELECT xql_dtd("", "", "");
+xql_dtd("", "", "")
+NULL
+SELECT xql_dtd(null);
+xql_dtd(null)
+NULL
+SELECT xql_dtd("html", null, null);
+xql_dtd("html", null, null)
+<!DOCTYPE html>
+SELECT xql_dtd("html", null, "abc");
+xql_dtd("html", null, "abc")
+NULL
+SELECT xql_dtd("html", "123", "abc", null);
+xql_dtd("html", "123", "abc", null)
+<!DOCTYPE html PUBLIC "123" "abc">
+SELECT xql_dtd("html", "123", "abc", "def", "to_much");
+ERROR HY000: Can't initialize function 'xql_dtd'; xql_dtd() takes at most 4 arguments

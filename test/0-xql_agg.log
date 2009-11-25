@@ -1,0 +1,103 @@
+USE mysql;
+SELECT xql_agg();
+ERROR HY000: Can't initialize function 'xql_agg'; xql_agg() requires at least 1 argument
+SELECT xql_agg("Arnold" AS author);
+xql_agg("Arnold" AS author)
+<author>Arnold</author>
+SELECT xql_agg("Chapter one" AS chapter, "Arnold" AS author);
+xql_agg("Chapter one" AS chapter, "Arnold" AS author)
+<chapter>Chapter one</chapter><author>Arnold</author>
+SELECT xql_agg("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`, 371 as `pages`);
+xql_agg("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`, 371 as `pages`)
+<chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release><pages>371</pages>
+SELECT xql_agg("book" AS `xql:child`);
+xql_agg("book" AS `xql:child`)
+<book/>
+SELECT xql_agg("books" AS `xql:root`);
+xql_agg("books" AS `xql:root`)
+<books/>
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`);
+xql_agg("books" AS `xql:root`, "book" AS `xql:child`)
+<books><book/></books>
+SELECT xql_agg("book" AS `xql:child`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+xql_agg("book" AS `xql:child`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)
+<book><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release></book>
+SELECT xql_agg("books" AS `xql:root`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+xql_agg("books" AS `xql:root`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)
+<books><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release></books>
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+xql_agg("books" AS `xql:root`, "book" AS `xql:child`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)
+<books><book><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release></book></books>
+SELECT xql_agg("Remember two > one" AS `xql:cdata:chapter`, "Arnold Daniëls" AS author);
+xql_agg("Remember two > one" AS `xql:cdata:chapter`, "Arnold Daniëls" AS author)
+<chapter><![CDATA[Remember two > one]]></chapter><author>Arnold Daniëls</author>
+SELECT xql_agg("possessions" AS `xql:child`, "laptop" AS `possession`, "book" AS `possession`, "illusion of free will" AS `possession`);
+xql_agg("possessions" AS `xql:child`, "laptop" AS `possession`, "book" AS `possession`, "illusion of free will" AS `possession`)
+<possessions><possession>laptop</possession><possession>book</possession><possession>illusion of free will</possession></possessions>
+SELECT xql_agg(1, 2, 3, 4);
+xql_agg(1, 2, 3, 4)
+<1>1</1><2>2</2><3>3</3><4>4</4>
+SELECT xql_agg("");
+xql_agg("")
+<""></"">
+SELECT xql_agg(null);
+xql_agg(null)
+NULL
+SELECT xql_agg("" AS empty);
+xql_agg("" AS empty)
+<empty></empty>
+SELECT xql_agg(null AS empty);
+xql_agg(null AS empty)
+NULL
+SELECT xql_agg("" AS empty, "Chapter one" AS chapter);
+xql_agg("" AS empty, "Chapter one" AS chapter)
+<empty></empty><chapter>Chapter one</chapter>
+SELECT xql_agg(NULL AS empty, "Chapter one" AS chapter);
+xql_agg(NULL AS empty, "Chapter one" AS chapter)
+<chapter>Chapter one</chapter>
+SELECT xql_agg("book" AS `xql:child`, "" AS empty);
+xql_agg("book" AS `xql:child`, "" AS empty)
+<book><empty></empty></book>
+SELECT xql_agg("book" AS `xql:child`, null AS empty);
+xql_agg("book" AS `xql:child`, null AS empty)
+<book/>
+SELECT xql_agg("books" AS `xql:root`, "" AS empty);
+xql_agg("books" AS `xql:root`, "" AS empty)
+<books><empty></empty></books>
+SELECT xql_agg("books" AS `xql:root`, null AS empty);
+xql_agg("books" AS `xql:root`, null AS empty)
+<books/>
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`, "" AS empty);
+xql_agg("books" AS `xql:root`, "book" AS `xql:child`, "" AS empty)
+<books><book><empty></empty></book></books>
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`, null AS empty);
+xql_agg("books" AS `xql:root`, "book" AS `xql:child`, null AS empty)
+<books><book/></books>
+SELECT xql_agg("" AS `xql:child`, "Chapter one" AS chapter);
+xql_agg("" AS `xql:child`, "Chapter one" AS chapter)
+<chapter>Chapter one</chapter>
+SELECT xql_agg(null AS `xql:child`, "Chapter one" AS chapter);
+xql_agg(null AS `xql:child`, "Chapter one" AS chapter)
+<chapter>Chapter one</chapter>
+SELECT xql_agg("Remember two > one" AS `xql:cdata`);
+xql_agg("Remember two > one" AS `xql:cdata`)
+<![CDATA[Remember two > one]]>
+SELECT xql_agg("Remember two > one" AS `xql:cdata:`);
+xql_agg("Remember two > one" AS `xql:cdata:`)
+<![CDATA[Remember two > one]]>
+SELECT xql_agg("Remember two > one" AS `xql:cdatB:chapter`);
+ERROR HY000: Can't initialize function 'xql_agg'; Illigal XQL directive 'xql:cdatB:chapter'
+SELECT xql_agg("Remember two > one" AS `xql`);
+xql_agg("Remember two > one" AS `xql`)
+<xql>Remember two &gt; one</xql>
+SELECT xql_agg("Remember two > one" AS `xql_`);
+xql_agg("Remember two > one" AS `xql_`)
+<xql_>Remember two &gt; one</xql_>
+SELECT xql_agg("Remember two > one" AS `xql_stuff`);
+xql_agg("Remember two > one" AS `xql_stuff`)
+<xql_stuff>Remember two &gt; one</xql_stuff>
+SELECT xql_agg("Remember" AS ``);
+xql_agg("Remember" AS ``)
+<Remember/>
+SELECT xql_agg("book" AS `xql:child`, "books" AS `xql:root`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+ERROR HY000: Can't initialize function 'xql_agg'; Illigal XQL directive 'xql:root'

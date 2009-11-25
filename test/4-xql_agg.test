@@ -1,0 +1,34 @@
+##############################
+#
+# This is a file that can be run through mysqltest in order to perform some
+# basic testing on the functions in libmysql_udf_xql. This should
+# usually be invoked through the 'make test' command in the Makefile.
+#
+# Errors of UDFs do not have an error code, but can be caught using error 0.
+#
+#############################
+
+CREATE DATABASE IF NOT EXISTS `xql_test`;
+USE `xql_test`;
+
+DROP TABLE IF EXISTS `state`;
+CREATE TABLE `state` (`code` varchar(2) NOT NULL, `country_code` varchar(2) NOT NULL, `description` varchar(255) NOT NULL, PRIMARY KEY  (`code`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+INSERT INTO `state` VALUES ('al','us','Alabama'),('ak','us','Alaska'),('as','us','American Samoa'),('az','us','Arizona'),('ar','us','Arkansas'),('ca','us','California'),('co','us','Colorado'),('ct','us','Connecticut'),('de','us','Delaware'),('dc','us','District of Columbia'),('fm','us','Federated States of Micronesia'),('fl','us','Florida'),('ga','us','Georgia'),('gu','us','Guam'),('hi','us','Hawaii'),('id','us','Idaho'),('il','us','Illinois'),('in','us','Indiana'),('ia','us','Iowa'),('ks','us','Kansas'),('ky','us','Kentucky'),('la','us','Louisiana'),('me','us','Maine'),('mh','us','Marshall Islands'),('md','us','Maryland'),('ma','us','Massachusetts'),('mi','us','Michigan'),('mn','us','Minnesota'),('ms','us','Mississippi'),('mo','us','Missouri'),('mt','us','Montana'),('ne','us','Nebraska'),('nv','us','Nevada'),('nh','us','New Hampshire'),('nj','us','New Jersey'),('nm','us','New Mexico'),('ny','us','New York'),('nc','us','North Carolina'),('nd','us','North Dakota'),('mp','us','Northern Mariana Islands'),('oh','us','Ohio'),('ok','us','Oklahoma'),('or','us','Oregon'),('pw','us','Palau'),('pa','us','Pennsylvania'),('pr','us','Puerto Rico'),('ri','us','Rhode Island'),('sc','us','South Carolina'),('sd','us','South Dakota'),('tn','us','Tennessee'),('tx','us','Texas'),('ut','us','Utah'),('vt','us','Vermont'),('vi','us','Virgin Island'),('va','us','Virginia'),('wa','us','Washington'),('wv','us','West Virginia'),('wi','us','Wisconsin'),('wy','us','Wyoming'),('ab','ca','Alberta'),('bc','ca','British Columbia'),('mb','ca','Manitoba'),('nb','ca','New Brunswick'),('nf','ca','New Foundland'),('nt','ca','Northwest Territories'),('ns','ca','Nova Scotia'),('on','ca','Ontario'),('pe','ca','Prince Edward Island'),('pq','ca','Quebec'),('sk','ca','Saskatchewan'),('yt','ca','Yukon Territories');
+
+DROP TABLE IF EXISTS `country`;
+CREATE TABLE `country` (`code` varchar(2) NOT NULL, `description` varchar(255) NOT NULL, PRIMARY KEY  (`code`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+INSERT INTO `country` VALUES ('us','USA'),('ca','Canada'),('nl','Netherlands');
+
+
+###
+# Tests with data
+###
+
+SELECT xql_element("states", xql_agg("state" AS `xql:child`, state.code, state.description), country.code AS `code`, country.description) FROM `country` LEFT JOIN `state` ON `country`.`code` = `state`.`country_code` GROUP BY country_code;
+
+SELECT xql_element("states", states_xml AS `xql:raw`, country.code AS `code`, country.description) 
+ FROM `country` LEFT JOIN (
+  SELECT xql_agg("state" AS `xql:child`, state.code, state.description) AS states_xml, country_code FROM state GROUP BY country_code
+ ) AS `state` ON `country`.`code` = `state`.`country_code`;
+
+DROP DATABASE IF EXISTS `xql_test`;

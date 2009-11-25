@@ -1,0 +1,38 @@
+CREATE DATABASE IF NOT EXISTS `xql_test`;
+USE `xql_test`;
+DROP TABLE IF EXISTS `state`;
+Warnings:
+Note	1051	Unknown table 'state'
+CREATE TABLE `state` (`code` varchar(2) NOT NULL, `country_code` varchar(2) NOT NULL, `description` varchar(255) NOT NULL, PRIMARY KEY  (`code`)) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+INSERT INTO `state` VALUES ('al','us','Alabama'),('ak','us','Alaska'),('as','us','American Samoa'),('az','us','Arizona'),('ar','us','Arkansas'),('ca','us','California'),('co','us','Colorado'),('ct','us','Connecticut'),('de','us','Delaware'),('dc','us','District of Columbia'),('fm','us','Federated States of Micronesia'),('fl','us','Florida'),('ga','us','Georgia'),('gu','us','Guam'),('hi','us','Hawaii'),('id','us','Idaho'),('il','us','Illinois'),('in','us','Indiana'),('ia','us','Iowa'),('ks','us','Kansas'),('ky','us','Kentucky'),('la','us','Louisiana'),('me','us','Maine'),('mh','us','Marshall Islands'),('md','us','Maryland'),('ma','us','Massachusetts'),('mi','us','Michigan'),('mn','us','Minnesota'),('ms','us','Mississippi'),('mo','us','Missouri'),('mt','us','Montana'),('ne','us','Nebraska'),('nv','us','Nevada'),('nh','us','New Hampshire'),('nj','us','New Jersey'),('nm','us','New Mexico'),('ny','us','New York'),('nc','us','North Carolina'),('nd','us','North Dakota'),('mp','us','Northern Mariana Islands'),('oh','us','Ohio'),('ok','us','Oklahoma'),('or','us','Oregon'),('pw','us','Palau'),('pa','us','Pennsylvania'),('pr','us','Puerto Rico'),('ri','us','Rhode Island'),('sc','us','South Carolina'),('sd','us','South Dakota'),('tn','us','Tennessee'),('tx','us','Texas'),('ut','us','Utah'),('vt','us','Vermont'),('vi','us','Virgin Island'),('va','us','Virginia'),('wa','us','Washington'),('wv','us','West Virginia'),('wi','us','Wisconsin'),('wy','us','Wyoming'),('ab','ca','Alberta'),('bc','ca','British Columbia'),('mb','ca','Manitoba'),('nb','ca','New Brunswick'),('nf','ca','New Foundland'),('nt','ca','Northwest Territories'),('ns','ca','Nova Scotia'),('on','ca','Ontario'),('pe','ca','Prince Edward Island'),('pq','ca','Quebec'),('sk','ca','Saskatchewan'),('yt','ca','Yukon Territories');
+SELECT xql_forest("state" AS `xql:root`, code, `country_code`, `description`) FROM `state` LIMIT 5;
+xql_forest("state" AS `xql:root`, code, `country_code`, `description`)
+<state><code>al</code><country_code>us</country_code><description>Alabama</description></state>
+<state><code>ak</code><country_code>us</country_code><description>Alaska</description></state>
+<state><code>as</code><country_code>us</country_code><description>American Samoa</description></state>
+<state><code>az</code><country_code>us</country_code><description>Arizona</description></state>
+<state><code>ar</code><country_code>us</country_code><description>Arkansas</description></state>
+SELECT xql_forest("state" AS `xql:root`, state.code, state.`country_code`, `state`.`description`) FROM `state` LIMIT 5;
+xql_forest("state" AS `xql:root`, state.code, state.`country_code`, `state`.`description`)
+<state><code>al</code><country_code>us</country_code><description>Alabama</description></state>
+<state><code>ak</code><country_code>us</country_code><description>Alaska</description></state>
+<state><code>as</code><country_code>us</country_code><description>American Samoa</description></state>
+<state><code>az</code><country_code>us</country_code><description>Arizona</description></state>
+<state><code>ar</code><country_code>us</country_code><description>Arkansas</description></state>
+SELECT xql_forest("state" AS `xql:root`, code, country_code AS `country`, description) FROM `state` LIMIT 5;
+xql_forest("state" AS `xql:root`, code, country_code AS `country`, description)
+<state><code>al</code><country>us</country><description>Alabama</description></state>
+<state><code>ak</code><country>us</country><description>Alaska</description></state>
+<state><code>as</code><country>us</country><description>American Samoa</description></state>
+<state><code>az</code><country>us</country><description>Arizona</description></state>
+<state><code>ar</code><country>us</country><description>Arkansas</description></state>
+SELECT xql_forest("state" AS `xql:root`, code, country_code AS `country`, description) FROM `state` WHERE country_code='ca' LIMIT 5;
+xql_forest("state" AS `xql:root`, code, country_code AS `country`, description)
+<state><code>ab</code><country>ca</country><description>Alberta</description></state>
+<state><code>bc</code><country>ca</country><description>British Columbia</description></state>
+<state><code>mb</code><country>ca</country><description>Manitoba</description></state>
+<state><code>nb</code><country>ca</country><description>New Brunswick</description></state>
+<state><code>nf</code><country>ca</country><description>New Foundland</description></state>
+SELECT xql_forest("state" AS `xql:root`, code, country_code AS `country`, description) FROM `state` WHERE FALSE;
+xql_forest("state" AS `xql:root`, code, country_code AS `country`, description)
+DROP DATABASE IF EXISTS `xql_test`;

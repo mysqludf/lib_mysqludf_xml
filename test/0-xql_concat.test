@@ -1,0 +1,24 @@
+##############################
+#
+# This is a file that can be run through mysqltest in order to perform some
+# basic testing on the functions in libmysql_udf_xql. This should
+# usually be invoked through the 'make test' command in the Makefile.
+#
+#############################
+
+USE mysql;
+
+###
+# Tests for xql_concat
+###
+
+error 1123; SELECT xql_concat();
+SELECT xql_concat("<a/>");
+SELECT xql_concat("<a/>", "<b/>");
+SELECT xql_concat("<a/>", "<b name =\"Arnold Daniëls\"/>");
+SELECT xql_concat("<a/>", "no > cdata here" AS `xql:cdata`, "<b/>"); # Should not use CDATA
+SELECT xql_concat(1, 2, 3, 4);
+SELECT xql_concat("");
+SELECT xql_concat(null);
+SELECT xql_concat("", "<a/>", "<b/>");
+SELECT xql_concat(null, "<a/>", "<b/>");

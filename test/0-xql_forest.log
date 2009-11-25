@@ -1,0 +1,73 @@
+USE mysql;
+SELECT xql_forest();
+ERROR HY000: Can't initialize function 'xql_forest'; xql_forest() requires at least 1 argument
+SELECT xql_forest("Arnold" AS author);
+xql_forest("Arnold" AS author)
+<author>Arnold</author>
+SELECT xql_forest("Chapter one" AS chapter, "Arnold" AS author);
+xql_forest("Chapter one" AS chapter, "Arnold" AS author)
+<chapter>Chapter one</chapter><author>Arnold</author>
+SELECT xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`, 371 as `pages`);
+xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`, 371 as `pages`)
+<chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release><pages>371</pages>
+SELECT xql_forest("book" AS `xql:root`);
+xql_forest("book" AS `xql:root`)
+<book/>
+SELECT xql_forest("book" AS `xql:root`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+xql_forest("book" AS `xql:root`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)
+<book><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release></book>
+SELECT xql_forest("Remember two > one" AS `xql:cdata:chapter`, "Arnold Daniëls" AS author);
+xql_forest("Remember two > one" AS `xql:cdata:chapter`, "Arnold Daniëls" AS author)
+<chapter><![CDATA[Remember two > one]]></chapter><author>Arnold Daniëls</author>
+SELECT xql_forest("possessions" AS `xql:root`, "laptop" AS `possession`, "book" AS `possession`, "illusion of free will" AS `possession`);
+xql_forest("possessions" AS `xql:root`, "laptop" AS `possession`, "book" AS `possession`, "illusion of free will" AS `possession`)
+<possessions><possession>laptop</possession><possession>book</possession><possession>illusion of free will</possession></possessions>
+SELECT xql_forest(1, 2, 3, 4);
+xql_forest(1, 2, 3, 4)
+<1>1</1><2>2</2><3>3</3><4>4</4>
+SELECT xql_forest("");
+xql_forest("")
+<""></"">
+SELECT xql_forest(null);
+xql_forest(null)
+NULL
+SELECT xql_forest("" AS empty);
+xql_forest("" AS empty)
+<empty></empty>
+SELECT xql_forest(null AS empty);
+xql_forest(null AS empty)
+NULL
+SELECT xql_forest("" AS empty, "Chapter one" AS chapter);
+xql_forest("" AS empty, "Chapter one" AS chapter)
+<empty></empty><chapter>Chapter one</chapter>
+SELECT xql_forest(NULL AS empty, "Chapter one" AS chapter);
+xql_forest(NULL AS empty, "Chapter one" AS chapter)
+<chapter>Chapter one</chapter>
+SELECT xql_forest("book" AS `xql:root`, "" AS empty);
+xql_forest("book" AS `xql:root`, "" AS empty)
+<book><empty></empty></book>
+SELECT xql_forest("book" AS `xql:root`, null AS empty);
+xql_forest("book" AS `xql:root`, null AS empty)
+<book/>
+SELECT xql_forest("" AS `xql:root`, "Chapter one" AS chapter);
+xql_forest("" AS `xql:root`, "Chapter one" AS chapter)
+<chapter>Chapter one</chapter>
+SELECT xql_forest(null AS `xql:root`, "Chapter one" AS chapter);
+xql_forest(null AS `xql:root`, "Chapter one" AS chapter)
+<chapter>Chapter one</chapter>
+SELECT xql_forest("Remember two > one" AS `xql:cdata`);
+xql_forest("Remember two > one" AS `xql:cdata`)
+<![CDATA[Remember two > one]]>
+SELECT xql_forest("Remember two > one" AS `xql:cdata:`);
+xql_forest("Remember two > one" AS `xql:cdata:`)
+<![CDATA[Remember two > one]]>
+SELECT xql_forest("Remember two > one" AS `xql:cdatB:chapter`);
+ERROR HY000: Can't initialize function 'xql_forest'; Illigal XQL directive 'xql:cdatB:chapter'
+SELECT xql_forest("Remember two > one" AS `xql`);
+xql_forest("Remember two > one" AS `xql`)
+<xql>Remember two &gt; one</xql>
+SELECT xql_forest("Remember" AS ``);
+xql_forest("Remember" AS ``)
+<Remember/>
+SELECT xql_forest("Remember two > one" AS chapter, "book" AS `xql:root`, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+ERROR HY000: Can't initialize function 'xql_forest'; Illigal XQL directive 'xql:root'

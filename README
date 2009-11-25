@@ -1,0 +1,29 @@
+MySQL UDF Repository
+lib_mysqludf_xql
+
+-----------------------
+
+The lib_mysqludf_xql library provides an array of functions, which can be used to create XML output directly from MySQL
+using a single SQL query. This prevents having to convert a MySQL result to XML in a PHP script, Ruby script, etc. This
+improves performance and simplifies your code.
+
+The library provides the same functionality as SQL/XML, seen in MS SQL server and Oracle. However it uses normal functions.
+By using subqueries the same results as SQL/XML can be generated.
+
+lib_mysqludf_xql uses the xmlwriter library of libxml2, which is a superfast non-cached, forward-only generator of XML
+data. This library automaticly escapes XML entities and dynamicly allocated memory as the XML content grows. 
+
+For information about using this library, please see API
+
+-----------------------
+
+To build:
+ ./configure
+ make && make install
+
+To then load the functions:
+ mysql -u root -p < installdb.sql
+
+To remove the library from your system:
+ mysql -u root -p < uninstalldb.sql
+ make uninstall

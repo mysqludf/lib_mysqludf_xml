@@ -1,0 +1,49 @@
+##############################
+#
+# This is a file that can be run through mysqltest in order to perform some
+# basic testing on the functions in libmysql_udf_xql. This should
+# usually be invoked through the 'make test' command in the Makefile.
+#
+#############################
+
+USE mysql;
+
+###
+# Tests for xql_agg
+###
+
+error 1123; SELECT xql_agg();
+SELECT xql_agg("Arnold" AS author);
+SELECT xql_agg("Chapter one" AS chapter, "Arnold" AS author);
+SELECT xql_agg("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`, 371 as `pages`);
+SELECT xql_agg("book" AS `xql:child`);
+SELECT xql_agg("books" AS `xql:root`);
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`);
+SELECT xql_agg("book" AS `xql:child`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+SELECT xql_agg("books" AS `xql:root`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+SELECT xql_agg("Remember two > one" AS `xql:cdata:chapter`, "Arnold Daniëls" AS author);
+SELECT xql_agg("possessions" AS `xql:child`, "laptop" AS `possession`, "book" AS `possession`, "illusion of free will" AS `possession`);
+SELECT xql_agg(1, 2, 3, 4);
+SELECT xql_agg("");
+SELECT xql_agg(null);
+SELECT xql_agg("" AS empty);
+SELECT xql_agg(null AS empty);
+SELECT xql_agg("" AS empty, "Chapter one" AS chapter);
+SELECT xql_agg(NULL AS empty, "Chapter one" AS chapter);
+SELECT xql_agg("book" AS `xql:child`, "" AS empty);
+SELECT xql_agg("book" AS `xql:child`, null AS empty);
+SELECT xql_agg("books" AS `xql:root`, "" AS empty);
+SELECT xql_agg("books" AS `xql:root`, null AS empty);
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`, "" AS empty);
+SELECT xql_agg("books" AS `xql:root`, "book" AS `xql:child`, null AS empty);
+SELECT xql_agg("" AS `xql:child`, "Chapter one" AS chapter);
+SELECT xql_agg(null AS `xql:child`, "Chapter one" AS chapter);
+SELECT xql_agg("Remember two > one" AS `xql:cdata`);
+SELECT xql_agg("Remember two > one" AS `xql:cdata:`);
+error 1123; SELECT xql_agg("Remember two > one" AS `xql:cdatB:chapter`);
+SELECT xql_agg("Remember two > one" AS `xql`);
+SELECT xql_agg("Remember two > one" AS `xql_`);
+SELECT xql_agg("Remember two > one" AS `xql_stuff`);
+SELECT xql_agg("Remember" AS ``);
+error 1123; SELECT xql_agg("book" AS `xql:child`, "books" AS `xql:root`, "Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);

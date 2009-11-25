@@ -1,0 +1,26 @@
+USE mysql;
+SELECT xql_cdata();
+ERROR HY000: Can't initialize function 'xql_cdata'; xql_cdata() requires 1 argument
+SELECT xql_cdata("ab");
+xql_cdata("ab")
+<![CDATA[ab]]>
+SELECT xql_cdata("Arnold Daniëls");
+xql_cdata("Arnold Daniëls")
+<![CDATA[Arnold Daniëls]]>
+SELECT xql_cdata("Remember two > one");
+xql_cdata("Remember two > one")
+<![CDATA[Remember two > one]]>
+SELECT xql_cdata(10);
+xql_cdata(10)
+<![CDATA[10]]>
+SELECT xql_cdata(MAKEDATE(2001,32));
+xql_cdata(MAKEDATE(2001,32))
+<![CDATA[2001-02-01]]>
+SELECT xql_cdata("ab", "de");
+ERROR HY000: Can't initialize function 'xql_cdata'; xql_cdata() requires 1 argument
+SELECT xql_cdata("");
+xql_cdata("")
+<![CDATA[]]>
+SELECT xql_cdata(null);
+xql_cdata(null)
+NULL

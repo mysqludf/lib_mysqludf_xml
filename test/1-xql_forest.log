@@ -1,0 +1,34 @@
+USE mysql;
+SELECT xql_forest(xql_cdata("A > bang"));
+xql_forest(xql_cdata("A > bang"))
+<![CDATA[A > bang]]>
+SELECT xql_forest(xql_comment("A > bang"));
+xql_forest(xql_comment("A > bang"))
+<!--A > bang-->
+SELECT xql_forest(xql_encode("A > bang"));
+xql_forest(xql_encode("A > bang"))
+A &gt; bang
+SELECT xql_forest(xql_element("book"), "rolling stones" AS `artist`);
+xql_forest(xql_element("book"), "rolling stones" AS `artist`)
+<book/><artist>rolling stones</artist>
+SELECT xql_forest(xql_element("book"), "rolling stones" AS `artist`);
+xql_forest(xql_element("book"), "rolling stones" AS `artist`)
+<book/><artist>rolling stones</artist>
+SELECT xql_forest(xql_element("book", "text", "Remember two > one" AS `chapter`), "rolling stones" AS `artist`);
+xql_forest(xql_element("book", "text", "Remember two > one" AS `chapter`), "rolling stones" AS `artist`)
+<book chapter="Remember two &gt; one">text</book><artist>rolling stones</artist>
+SELECT xql_forest(xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`), "rolling stones" AS `artist`);
+xql_forest(xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`), "rolling stones" AS `artist`)
+<chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release><artist>rolling stones</artist>
+SELECT xql_forest(xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)), "rolling stones" AS `artist`);
+xql_forest(xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)), "rolling stones" AS `artist`)
+<album artist="rolling stones"><![CDATA[A > bang]]></album><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release><artist>rolling stones</artist>
+SELECT xql_forest(xql_element("book") AS `xql:raw`, "rolling stones" AS `artist`);
+xql_forest(xql_element("book") AS `xql:raw`, "rolling stones" AS `artist`)
+<book/><artist>rolling stones</artist>
+SELECT xql_forest(xql_element("book") AS `plain`, "rolling stones" AS `artist`);
+xql_forest(xql_element("book") AS `plain`, "rolling stones" AS `artist`)
+<plain>&lt;book/&gt;</plain><artist>rolling stones</artist>
+SELECT xql_forest("album" AS `xql:root`, xql_encode("A > bang"), xql_element("book"), "rolling stones" AS `artist`);
+xql_forest("album" AS `xql:root`, xql_encode("A > bang"), xql_element("book"), "rolling stones" AS `artist`)
+<album>A &gt; bang<book/><artist>rolling stones</artist></album>

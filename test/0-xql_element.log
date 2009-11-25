@@ -1,0 +1,64 @@
+USE mysql;
+SELECT xql_element();
+ERROR HY000: Can't initialize function 'xql_element'; xql_element() requires at least 1 argument (name)
+SELECT xql_element("book");
+xql_element("book")
+<book/>
+SELECT xql_element("book", "Chapter one");
+xql_element("book", "Chapter one")
+<book>Chapter one</book>
+SELECT xql_element("book", "Remember two > one");
+xql_element("book", "Remember two > one")
+<book>Remember two &gt; one</book>
+SELECT xql_element("book", "Remember two > one" AS `xql:cdata`);
+xql_element("book", "Remember two > one" AS `xql:cdata`)
+<book><![CDATA[Remember two > one]]></book>
+SELECT xql_element("book", "<chapter nr=\"1\">Remember two &gt; one</chapter>" AS `xql:raw`);
+xql_element("book", "<chapter nr=\"1\">Remember two &gt; one</chapter>" AS `xql:raw`)
+<book><chapter nr="1">Remember two &gt; one</chapter></book>
+SELECT xql_element("book", "Remember two > one" AS `xql:cdata`, "Arnold" as author);
+xql_element("book", "Remember two > one" AS `xql:cdata`, "Arnold" as author)
+<book author="Arnold"><![CDATA[Remember two > one]]></book>
+SELECT xql_element("book", "Remember two > one" AS `xql:cdata`, "Arnold" as author, 371 as `pages`);
+xql_element("book", "Remember two > one" AS `xql:cdata`, "Arnold" as author, 371 as `pages`)
+<book author="Arnold" pages="371"><![CDATA[Remember two > one]]></book>
+SELECT xql_element("author", "Arnold Daniëls");
+xql_element("author", "Arnold Daniëls")
+<author>Arnold Daniëls</author>
+SELECT xql_element("book", "Remember two > one", "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`);
+xql_element("book", "Remember two > one", "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)
+<book author="Arnold Dani&#xEB;ls" release="2001-02-01">Remember two &gt; one</book>
+SELECT xql_element(1, 2, 3, 4);
+xql_element(1, 2, 3, 4)
+<1 3="3" 4="4">2</1>
+SELECT xql_element("");
+xql_element("")
+NULL
+SELECT xql_element(null);
+xql_element(null)
+NULL
+SELECT xql_element("book", "");
+xql_element("book", "")
+<book></book>
+SELECT xql_element("book", null);
+xql_element("book", null)
+<book/>
+SELECT xql_element("", "abc");
+xql_element("", "abc")
+NULL
+SELECT xql_element(null, "abc");
+xql_element(null, "abc")
+NULL
+SELECT xql_element("book", "Remember two > one", "" as author, 371 as `pages`);
+xql_element("book", "Remember two > one", "" as author, 371 as `pages`)
+<book author="" pages="371">Remember two &gt; one</book>
+SELECT xql_element("book", "Remember two > one", null as author, 371 as `pages`);
+xql_element("book", "Remember two > one", null as author, 371 as `pages`)
+<book pages="371">Remember two &gt; one</book>
+SELECT xql_element("book", "Remember two > one" AS `xql:cdatB`);
+ERROR HY000: Can't initialize function 'xql_element'; Illigal XQL directive 'xql:cdatB'
+SELECT xql_element("book", "Remember two > one" AS `xql:`);
+ERROR HY000: Can't initialize function 'xql_element'; Illigal XQL directive 'xql:'
+SELECT xql_element("book", "Remember two > one" AS `xql`);
+xql_element("book", "Remember two > one" AS `xql`)
+<book>Remember two &gt; one</book>

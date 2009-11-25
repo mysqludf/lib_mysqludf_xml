@@ -1,0 +1,28 @@
+USE mysql;
+SELECT xql_element("album", xql_cdata("A > bang"));
+xql_element("album", xql_cdata("A > bang"))
+<album><![CDATA[A > bang]]></album>
+SELECT xql_element("album", xql_comment("A > bang"));
+xql_element("album", xql_comment("A > bang"))
+<album><!--A > bang--></album>
+SELECT xql_element("album", xql_encode("A > bang"));
+xql_element("album", xql_encode("A > bang"))
+<album>A &gt; bang</album>
+SELECT xql_element("album", xql_element("book"), "rolling stones" AS `artist`);
+xql_element("album", xql_element("book"), "rolling stones" AS `artist`)
+<album artist="rolling stones"><book/></album>
+SELECT xql_element("album", xql_element("book", "text", "Remember two > one" AS `chapter`), "rolling stones" AS `artist`);
+xql_element("album", xql_element("book", "text", "Remember two > one" AS `chapter`), "rolling stones" AS `artist`)
+<album artist="rolling stones"><book chapter="Remember two &gt; one">text</book></album>
+SELECT xql_element("album", xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`), "rolling stones" AS `artist`);
+xql_element("album", xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`), "rolling stones" AS `artist`)
+<album artist="rolling stones"><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release></album>
+SELECT xql_element("album", xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)), "rolling stones" AS `artist`);
+xql_element("album", xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)), "rolling stones" AS `artist`)
+<album artist="rolling stones"><album artist="rolling stones"><![CDATA[A > bang]]></album><chapter>Remember two &gt; one</chapter><author>Arnold Daniëls</author><release>2001-02-01</release></album>
+SELECT xql_element("album", xql_element("book") AS `xql:raw`, "rolling stones" AS `artist`);
+xql_element("album", xql_element("book") AS `xql:raw`, "rolling stones" AS `artist`)
+<album artist="rolling stones"><book/></album>
+SELECT xql_element("album", xql_element("book") AS `plain`, "rolling stones" AS `artist`);
+xql_element("album", xql_element("book") AS `plain`, "rolling stones" AS `artist`)
+<album artist="rolling stones">&lt;book/&gt;</album>

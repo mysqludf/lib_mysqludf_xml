@@ -1,0 +1,40 @@
+USE mysql;
+SELECT xql_textdecl();
+ERROR HY000: Can't initialize function 'xql_textdecl'; xql_textdecl() requires at least 1 argument (version)
+SELECT xql_textdecl("1.0");
+xql_textdecl("1.0")
+<?xml version="1.0"?>
+
+SELECT xql_textdecl("1.0", "ISO-8859-1");
+xql_textdecl("1.0", "ISO-8859-1")
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+SELECT xql_textdecl("1.0", "ISO-8859-1", "yes");
+xql_textdecl("1.0", "ISO-8859-1", "yes")
+<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>
+
+SELECT xql_textdecl("", "", "");
+xql_textdecl("", "", "")
+NULL
+SELECT xql_textdecl(null, null, null);
+xql_textdecl(null, null, null)
+NULL
+SELECT xql_textdecl(null, "ISO-8859-1");
+xql_textdecl(null, "ISO-8859-1")
+NULL
+SELECT xql_textdecl("1.0", null);
+xql_textdecl("1.0", null)
+<?xml version="1.0"?>
+
+SELECT xql_textdecl("1.0", "");
+xql_textdecl("1.0", "")
+<?xml version="1.0"?>
+
+SELECT xql_textdecl("1.0", "ISO-8859-1", null);
+xql_textdecl("1.0", "ISO-8859-1", null)
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+SELECT xql_textdecl("1.0", "ISO-8859-1", "");
+xql_textdecl("1.0", "ISO-8859-1", "")
+<?xml version="1.0" encoding="ISO-8859-1"?>
+

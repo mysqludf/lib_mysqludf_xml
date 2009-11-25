@@ -1,0 +1,27 @@
+##############################
+#
+# This is a file that can be run through mysqltest in order to perform some
+# basic testing on the functions in libmysql_udf_xql. This should
+# usually be invoked through the 'make test' command in the Makefile.
+#
+# Errors of UDFs do not have an error code, but can be caught using error 0.
+#
+#############################
+
+USE mysql;
+
+###
+# Tests combining xql_forest with other xql methods
+###
+
+SELECT xql_forest(xql_cdata("A > bang"));
+SELECT xql_forest(xql_comment("A > bang"));
+SELECT xql_forest(xql_encode("A > bang"));
+SELECT xql_forest(xql_element("book"), "rolling stones" AS `artist`);
+SELECT xql_forest(xql_element("book"), "rolling stones" AS `artist`);
+SELECT xql_forest(xql_element("book", "text", "Remember two > one" AS `chapter`), "rolling stones" AS `artist`);
+SELECT xql_forest(xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`), "rolling stones" AS `artist`);
+SELECT xql_forest(xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`)), "rolling stones" AS `artist`);
+SELECT xql_forest(xql_element("book") AS `xql:raw`, "rolling stones" AS `artist`);
+SELECT xql_forest(xql_element("book") AS `plain`, "rolling stones" AS `artist`);
+SELECT xql_forest("album" AS `xql:root`, xql_encode("A > bang"), xql_element("book"), "rolling stones" AS `artist`);

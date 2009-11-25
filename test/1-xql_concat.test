@@ -1,0 +1,33 @@
+##############################
+#
+# This is a file that can be run through mysqltest in order to perform some
+# basic testing on the functions in libmysql_udf_xql. This should
+# usually be invoked through the 'make test' command in the Makefile.
+#
+# Errors of UDFs do not have an error code, but can be caught using error 0.
+#
+#############################
+
+USE mysql;
+
+###
+# Tests combining xql_concat with other xql methods
+###
+
+SELECT xql_concat(xql_element("album"));
+SELECT xql_concat(xql_element("album"), "<book/>");
+SELECT xql_concat(xql_element("album"), xql_element("book"));
+SELECT xql_concat(xql_element("album"), xql_element("book", "text"));
+SELECT xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_element("b", "text"));
+SELECT xql_concat(xql_element(NULL), xql_element("b", "text"));
+SELECT xql_concat(xql_element("album", "A > bang" as `xql:cdata`, "rolling stones" AS `artist`), xql_forest("Remember two > one" AS chapter, "Arnold Daniëls" AS `author`, MAKEDATE(2001,32) AS `release`));
+
+SELECT xql_concat(
+	xql_textdecl("1.0", "ISO-8859-1", "yes"),
+	xql_pi("type=\"text/xml\" href=\"yourstyle.xsl\"" as `xsl-stylesheet`),
+	xql_dtd("persons", "//CRM/PERSONS/DTD/1.0", "http://www.test.com/crm/persons.dtd"),
+	xql_concat("persons" AS `xql:root`,
+		xql_element("person", xql_forest("possessions" AS `xql:root`, "laptop" AS `possession`, "book" AS `possession`, "illusion of free will" AS `possession`), "Arnold Daniëls" as name, 25 as age),
+		xql_element("person", xql_forest("possessions" AS `xql:root`, "laptop" AS `possession`, "power of the 16 beasts" AS `possession`), "Roland Bouman" as name, null as age)
+	)
+) AS `xml doc`;

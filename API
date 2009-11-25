@@ -1,0 +1,40 @@
+
+lib_mysqludf_xql_info()
+	Output the library version.
+
+
+xql_textdecl(string version, string encoding [, string standalone])
+    Write a text declarion; <?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+
+xql_pi(string content AS target)
+    Write processing instruction; <?xsl-stylesheet type="text/xml" href="yourstyle.xsl"?>
+    
+xql_dtd(string name [, string pubid, string sysid [, string subset]]])
+    Write a DTD tag
+
+
+xql_element(string name, [string content | string XML AS `xql:raw` | string CDATA AS `xql:cdata` [, string att_val AS `att_name`, ...]])
+    Write element node with attributes.
+
+xql_forest([string name_root AS `xql:root`,] string content AS name | string XML AS `xql:raw` | string CDATA AS `xql:cdata:%`, ...)
+    Write an element for each name/content pair.
+    Arguments named `xql:raw` and output of xql functions are inserted as raw XML.
+    Arguments starting with `xql:cdata:` are inserted as CDATA sections.
+
+xql_concat([string name_root AS `xql:root`,] string xml, ...)
+    Concatenate xml.
+    
+xql_agg([string name_root AS `xql:root`,] [string name_child AS `xql:child`,] string content AS name | string XML AS `xql:raw` | string CDATA AS `xql:cdata:%`, ...)
+   Group concatenate XML for each row.
+   Normal arguments are inserted as XML nodes.
+   Arguments named `xql:raw` and output of xql functions are inserted as raw XML.
+   Arguments starting with `xql:cdata:` as name are inserted as CDATA sections.
+
+xql_comment(string content)
+    Write comment node
+    
+xql_cdata(string content)
+    Write CDATA section node
+
+xql_encode(string content)
+    Encode special chars

@@ -1,0 +1,8 @@
+version 0.9.5 - API CHANGE
+ Instead of anything starting with `xql:` will need to use AS `xql:raw`
+ to insert raw XML. Anything starting with `xql:` is taken as directive.
+
+ Adding a node with a CDATA section was a big hassle before v0.9.5. You 
+ needed to do xql_agg(title, xql_element("description", xql_cdata(desc))). 
+ This is slow and generally sucks. Therefor a new directive `xql:cdata` is
+ implemented, allowing xql_agg(title, desc AS `xql:cdata:description`).

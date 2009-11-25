@@ -1,0 +1,51 @@
+Version 1.0.0
+  Put headers in mysqludf.h
+  Put helper functions in own source file mysqludf.cc
+  Don't declare ntargs[args->length] as array, but malloc instead
+  Make mrproper also cleans test directory
+  Set the libdir to the mysql plugin dir by default (can stil be changed with --libdir=)
+  Considering the library stable (Jeuhhhh)
+
+Version 0.9.7
+  Autoconf fixes
+
+Version 0.9.6
+  Test dir, SQL files and API file waren't included in tar.gz. Changed Makefile.am
+  Use strlen instead of strnlen.
+  Don't delete tar.gz files when running `make mrproper`
+  Change `make tests` to `make test`
+
+Version 0.9.5
+  API CHANGE: Only `xql:raw` can be used for raw XML (as it was before v0.9.1), other `xml:%` will trigger an error.
+  Added xql directive `xql:cdata` for xql_element and `xql:cdata:%` for xql_forest and xql_agg
+  Fixed bug: Crash when using xql_element with only 1 argument, eg; xql_element("book")
+  Fixed bug: Use copied attribute names instead in xql_elements. This could cause crash and did not properly escape backquotes and only use name after dot.   
+  Use RETURN_ERR macro in %_init functions
+  Check if memory could be allocated everywhere (was missing at a few spots) 
+  Use autotools for build process
+  Get info for lib_mysqludf_xql_info from build process
+  Added unit tests
+  Don't allow xql_forest, xql_concat and xql_agg to have 0 arguments
+  Fixed bug: xql_ should not seen as raw, only xql_%()
+  Fixed bug: AS `x`, AS `xq` and AS `xql` caused strange behaviour. Other short attribute names could cause strange chars or behaviour.
+  Many other border case (strange data as arg) bugfixes
+
+Version 0.9.4
+  Properly escape backquotes and only use name after dot
+
+Version 0.9.3
+  Solved segmentation faults and incorrect behaviour by buffer overflows
+
+Version 0.9.2
+  Use charinstr instead of strinstr in xql_agg_init
+  File 'LICENCE' contained GPL instead of LGPL
+
+Version 0.9.1
+  Insert raw XML for all arguments starting with `xql:` instead of only `xql:raw`.
+  Trim backquotes from attribute names. They may appear when no alias is specified, like xql_forest(`description`).
+  Makefile should have a rule named 'clean', not 'clear'.
+  Copy attribute names (arguments) to make them 0 terminated to prevent buffer overflow.
+  Still do the buffer overflow to make attribute values 0 terminated, but restore the buffer before exiting the function. 
+
+Version 0.9.0
+  First release
